@@ -18,4 +18,8 @@ public class Movimiento {
     private TipoMovimiento tipoMovimiento;
     private double valor;
     private double saldo;
+
+    @ManyToOne
+    @JoinColumn(name = "cuenta_id")
+    private Cuenta cuenta;
 }

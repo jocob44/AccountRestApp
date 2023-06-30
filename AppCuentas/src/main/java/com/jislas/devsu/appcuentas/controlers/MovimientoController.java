@@ -1,11 +1,12 @@
 package com.jislas.devsu.appcuentas.controlers;
 
-import com.jislas.devsu.appcuentas.models.dto.MovimientoDto;
+import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
 import com.jislas.devsu.appcuentas.services.MovimientoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController

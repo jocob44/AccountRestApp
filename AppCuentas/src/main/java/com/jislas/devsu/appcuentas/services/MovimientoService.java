@@ -1,6 +1,6 @@
 package com.jislas.devsu.appcuentas.services;
 
-import com.jislas.devsu.appcuentas.models.dto.MovimientoDto;
+import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
 
 import java.util.List;
 

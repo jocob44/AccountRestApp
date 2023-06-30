@@ -1,12 +1,18 @@
 package com.jislas.devsu.appcuentas.controlers;
 
-import com.jislas.devsu.appcuentas.models.dto.CuentaDto;
+import com.jislas.devsu.appcuentas.models.dto.Cuenta.CreateCuentaDto;
+import com.jislas.devsu.appcuentas.models.dto.Cuenta.CuentaDto;
 import com.jislas.devsu.appcuentas.services.AccountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/cuentas")
@@ -31,7 +37,18 @@ public class CuentaController {
     }
 
     @PostMapping
-    public ResponseEntity<CuentaDto> createCuenta(@RequestBody CuentaDto cuentaDto) {
+    public ResponseEntity<?> createCuenta(@Valid @RequestBody CreateCuentaDto cuentaDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            // Obtener los errores de validación
+            List<String> errores = result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+
+            // Devolver una respuesta de error con los mensajes de validación
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+
+        }
         CuentaDto createdCuenta = accountService.createCuenta(cuentaDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCuenta);
     }

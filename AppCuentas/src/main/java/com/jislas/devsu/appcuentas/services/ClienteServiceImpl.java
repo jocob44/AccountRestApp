@@ -1,16 +1,16 @@
 package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.models.dao.ClienteDao;
-import com.jislas.devsu.appcuentas.models.dto.ClienteDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.ClienteDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClientDto;
 import com.jislas.devsu.appcuentas.models.entity.Cliente;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import org.springframework.beans.BeanUtils;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +36,7 @@ public class ClienteServiceImpl implements ClienteService {
         return convertToDto(cliente);
     }
 
-    public ClienteDto createCliente(ClienteDto clienteDto) {
+    public ClienteDto createCliente(CreateClientDto clienteDto) {
         Cliente cliente = convertToEntity(clienteDto);
         Cliente savedCliente = clienteDao.save(cliente);
         return convertToDto(savedCliente);
@@ -91,7 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteDto;
     }
 
-    private Cliente convertToEntity(ClienteDto clienteDto) {
+    private Cliente convertToEntity(CreateClientDto clienteDto) {
         Cliente cliente = new Cliente();
         BeanUtils.copyProperties(clienteDto, cliente);
         return cliente;

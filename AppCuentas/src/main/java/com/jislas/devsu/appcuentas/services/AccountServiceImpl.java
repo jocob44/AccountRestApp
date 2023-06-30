@@ -1,13 +1,15 @@
 package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.models.dao.CuentaDao;
-import com.jislas.devsu.appcuentas.models.dto.CuentaDto;
+import com.jislas.devsu.appcuentas.models.dto.Cuenta.CreateCuentaDto;
+import com.jislas.devsu.appcuentas.models.dto.Cuenta.CuentaDto;
 import com.jislas.devsu.appcuentas.models.entity.Cuenta;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public CuentaDto createCuenta(CuentaDto cuentaDto) {
+    public CuentaDto createCuenta(CreateCuentaDto cuentaDto) {
         Cuenta cuenta = convertToEntity(cuentaDto);
         Cuenta savedCuenta = cuentaDao.save(cuenta);
         return convertToDto(savedCuenta);
@@ -66,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
         return cuentaDto;
     }
 
-    private Cuenta convertToEntity(CuentaDto cuentaDto) {
+    private Cuenta convertToEntity(CreateCuentaDto cuentaDto) {
         Cuenta cuenta = new Cuenta();
         BeanUtils.copyProperties(cuentaDto, cuenta);
         return cuenta;

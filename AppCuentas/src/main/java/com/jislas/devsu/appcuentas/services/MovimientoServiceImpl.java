@@ -1,13 +1,14 @@
 package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.models.dao.MovimientoDao;
-import com.jislas.devsu.appcuentas.models.dto.MovimientoDto;
+import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
 import com.jislas.devsu.appcuentas.models.entity.Movimiento;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -1,12 +1,18 @@
 package com.jislas.devsu.appcuentas.controlers;
 
-import com.jislas.devsu.appcuentas.models.dto.ClienteDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.ClienteDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClientDto;
 import com.jislas.devsu.appcuentas.services.ClienteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/clientes")
@@ -31,7 +37,18 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<ClienteDto> createCliente(@RequestBody ClienteDto clienteDto) {
+    public ResponseEntity<?> createCliente(@Valid @RequestBody CreateClientDto clienteDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            // Obtener los errores de validación
+            List<String> errores = result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+
+            // Devolver una respuesta de error con los mensajes de validación
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+
+        }
         ClienteDto createdCliente = clienteService.createCliente(clienteDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCliente);
     }
