@@ -1,6 +1,8 @@
 package com.jislas.devsu.appcuentas.models.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
@@ -11,7 +13,10 @@ public class Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotEmpty
     private String numeroCuenta;
+
+    @NotNull
     private double saldoInicial;
     @Enumerated(EnumType.STRING)
     private EstadoCuenta estado;

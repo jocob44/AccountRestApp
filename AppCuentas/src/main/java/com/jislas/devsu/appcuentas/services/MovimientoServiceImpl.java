@@ -1,6 +1,7 @@
 package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.models.dao.MovimientoDao;
+import com.jislas.devsu.appcuentas.models.dto.movimiento.CreateMovimientoDto;
 import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
 import com.jislas.devsu.appcuentas.models.entity.Movimiento;
 import org.springframework.beans.BeanUtils;
@@ -38,7 +39,7 @@ public class MovimientoServiceImpl implements MovimientoService {
     }
 
     @Override
-    public MovimientoDto createMovimiento(MovimientoDto movimientoDto) {
+    public MovimientoDto createMovimiento(CreateMovimientoDto movimientoDto) {
         Movimiento movimiento = convertToEntity(movimientoDto);
         Movimiento savedMovimiento = movimientoDao.save(movimiento);
         return convertToDto(savedMovimiento);
@@ -67,7 +68,7 @@ public class MovimientoServiceImpl implements MovimientoService {
         return movimientoDto;
     }
 
-    private Movimiento convertToEntity(MovimientoDto movimientoDto) {
+    private Movimiento convertToEntity(CreateMovimientoDto movimientoDto) {
         Movimiento movimiento = new Movimiento();
         BeanUtils.copyProperties(movimientoDto, movimiento);
         return movimiento;

@@ -1,13 +1,18 @@
 package com.jislas.devsu.appcuentas.controlers;
 
+import com.jislas.devsu.appcuentas.models.dto.movimiento.CreateMovimientoDto;
 import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
 import com.jislas.devsu.appcuentas.services.MovimientoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/movimientos")
@@ -32,7 +37,16 @@ public class MovimientoController {
     }
 
     @PostMapping
-    public ResponseEntity<MovimientoDto> createMovimiento(@RequestBody MovimientoDto movimientoDto) {
+    public ResponseEntity<?> createMovimiento(@Valid @RequestBody CreateMovimientoDto movimientoDto, BindingResult result) {
+
+        if (result.hasErrors()) {
+            List<String> errores = result.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
+
+        }
         MovimientoDto createdMovimiento = movimientoService.createMovimiento(movimientoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdMovimiento);
     }

@@ -2,6 +2,7 @@ package com.jislas.devsu.appcuentas.models.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -13,10 +14,15 @@ public class Movimiento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private LocalDate fecha;
     @Enumerated(EnumType.STRING)
     private TipoMovimiento tipoMovimiento;
+
+    @NotNull
     private double valor;
+    @NotNull
     private double saldo;
 
     @ManyToOne
