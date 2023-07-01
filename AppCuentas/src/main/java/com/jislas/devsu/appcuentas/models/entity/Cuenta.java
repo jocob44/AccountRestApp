@@ -14,6 +14,7 @@ public class Cuenta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
+    @Column(unique = true)
     private Long numeroCuenta;
 
     @NotNull

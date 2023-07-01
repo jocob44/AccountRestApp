@@ -62,4 +62,10 @@ public class MovimientoController {
         movimientoService.deleteMovimiento(id);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<MovimientoDto> partialUpdateMovimiento(@PathVariable Long id, @RequestBody MovimientoDto movimientoDto) {
+        MovimientoDto patchedMovimiento = movimientoService.partialUpdateMovimiento(id, movimientoDto);
+        return ResponseEntity.ok(patchedMovimiento);
+    }
 }

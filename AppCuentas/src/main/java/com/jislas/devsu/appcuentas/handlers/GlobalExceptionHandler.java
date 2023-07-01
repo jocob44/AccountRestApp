@@ -3,6 +3,7 @@ package com.jislas.devsu.appcuentas.handlers;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -93,4 +94,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(mensaje);
     }
 
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleMiExcepcion(DataIntegrityViolationException ex) {
+        String mensaje = ex.getMessage();
+        log.info("DataIntegrityViolationException happended" + mensaje);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body("El registro no puede eliminarse/modificarse por que posee datos relacionados");
+    }
 }

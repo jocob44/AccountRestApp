@@ -2,7 +2,7 @@ package com.jislas.devsu.appcuentas.controlers;
 
 import com.jislas.devsu.appcuentas.models.dto.Cuenta.CreateCuentaDto;
 import com.jislas.devsu.appcuentas.models.dto.Cuenta.CuentaDto;
-import com.jislas.devsu.appcuentas.services.AccountService;
+import com.jislas.devsu.appcuentas.services.CuentaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -17,22 +17,22 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/cuentas")
 public class CuentaController {
-    private final AccountService accountService;
+    private final CuentaService cuentaService;
 
     @Autowired
-    public CuentaController(AccountService accountService) {
-        this.accountService = accountService;
+    public CuentaController(CuentaService cuentaService) {
+        this.cuentaService = cuentaService;
     }
 
     @GetMapping
     public ResponseEntity<List<CuentaDto>> getAllCuentas() {
-        List<CuentaDto> cuentas = accountService.getAllCuentas();
+        List<CuentaDto> cuentas = cuentaService.getAllCuentas();
         return ResponseEntity.ok(cuentas);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CuentaDto> getCuentaById(@PathVariable Long id) {
-        CuentaDto cuenta = accountService.getCuentaById(id);
+        CuentaDto cuenta = cuentaService.getCuentaById(id);
         return ResponseEntity.ok(cuenta);
     }
 
@@ -49,19 +49,25 @@ public class CuentaController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
 
         }
-        CuentaDto createdCuenta = accountService.createCuenta(cuentaDto);
+        CuentaDto createdCuenta = cuentaService.createCuenta(cuentaDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdCuenta);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CuentaDto> updateCuenta(@PathVariable Long id, @RequestBody CuentaDto cuentaDto) {
-        CuentaDto updatedCuenta = accountService.updateCuenta(id, cuentaDto);
+        CuentaDto updatedCuenta = cuentaService.updateCuenta(id, cuentaDto);
         return ResponseEntity.ok(updatedCuenta);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCuenta(@PathVariable Long id) {
-        accountService.deleteCuenta(id);
+        cuentaService.deleteCuenta(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<CuentaDto> partialUpdateCuenta(@PathVariable Long id, @RequestBody CuentaDto cuentaDto) {
+        CuentaDto patchedCuenta = cuentaService.partialUpdateCuenta(id, cuentaDto);
+        return ResponseEntity.ok(patchedCuenta);
     }
 }

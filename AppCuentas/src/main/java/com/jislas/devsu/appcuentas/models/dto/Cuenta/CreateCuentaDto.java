@@ -2,6 +2,7 @@ package com.jislas.devsu.appcuentas.models.dto.Cuenta;
 
 import com.jislas.devsu.appcuentas.models.entity.EstadoCuenta;
 import com.jislas.devsu.appcuentas.models.entity.TipoCuenta;
+import com.jislas.devsu.appcuentas.validators.IsUniqueNumeroCuenta;
 import com.jislas.devsu.appcuentas.validators.ValidClientId;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 public class CreateCuentaDto {
 
     @NotNull
+    @IsUniqueNumeroCuenta
     private Long numeroCuenta;
 
     @NotNull

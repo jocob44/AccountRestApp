@@ -5,7 +5,7 @@ import com.jislas.devsu.appcuentas.models.dto.Cuenta.CuentaDto;
 
 import java.util.List;
 
-public interface AccountService {
+public interface CuentaService {
     List<CuentaDto> getAllCuentas();
 
     CuentaDto getCuentaById(Long id);
@@ -13,5 +13,8 @@ public interface AccountService {
     CuentaDto createCuenta(CreateCuentaDto cuentaDto);
 
     CuentaDto updateCuenta(Long id, CuentaDto cuentaDto);
+
     void deleteCuenta(Long id);
+
+    CuentaDto partialUpdateCuenta(Long id, CuentaDto cuentaDto);
 }

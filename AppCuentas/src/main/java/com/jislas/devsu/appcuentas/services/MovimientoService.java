@@ -15,4 +15,6 @@ public interface MovimientoService {
     MovimientoDto updateMovimiento(Long id, MovimientoDto movimientoDto);
 
     void deleteMovimiento(Long id);
+
+    MovimientoDto partialUpdateMovimiento(Long id, MovimientoDto movimientoDto);
 }
