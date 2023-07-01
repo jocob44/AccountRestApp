@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidCuentaIdValidator.class)
-public @interface ValidCuentaId {
-    String message() default "ID de Cuenta inválido";
+@Constraint(validatedBy = NumeroDeCuentaValidator.class)
+public @interface ValidNumeroCuenta {
+    String message() default "El numero de Cuenta es inválido";
 
     Class<?>[] groups() default {};
 

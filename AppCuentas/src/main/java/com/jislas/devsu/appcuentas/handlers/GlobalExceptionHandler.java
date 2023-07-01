@@ -84,4 +84,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 apiError, new HttpHeaders(), apiError.getStatus());
     }
 
+    @ExceptionHandler(OperacionInvalidaException.class)
+    public ResponseEntity<String> handleMiExcepcion(OperacionInvalidaException ex) {
+        String mensaje = ex.getMessage();
+        log.info("OperacionInvalidaException happended" + mensaje);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(mensaje);
+    }
+
 }

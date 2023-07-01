@@ -1,10 +1,10 @@
 package com.jislas.devsu.appcuentas.models.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Data
@@ -13,11 +13,12 @@ public class Cuenta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotEmpty
-    private String numeroCuenta;
+    @NotNull
+    private Long numeroCuenta;
 
     @NotNull
-    private double saldoInicial;
+    private BigDecimal saldoInicial;
+
     @Enumerated(EnumType.STRING)
     private EstadoCuenta estado;
 
@@ -30,5 +31,10 @@ public class Cuenta {
 
     @OneToMany(mappedBy = "cuenta")
     private List<Movimiento> movimientos;
+
+    @ManyToOne
+    @JoinColumn(name = "last_movement_id")
+    private Movimiento lastMovement;
+
 
 }

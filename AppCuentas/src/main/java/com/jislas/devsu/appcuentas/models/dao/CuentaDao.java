@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CuentaDao extends JpaRepository<Cuenta, Long> {
+
+    boolean existsByNumeroCuenta(Long numeroCuenta);
+
+    Cuenta findByNumeroCuenta(Long numeroCuenta);
 }

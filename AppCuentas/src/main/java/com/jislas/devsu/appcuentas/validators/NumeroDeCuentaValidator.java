@@ -7,22 +7,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ValidCuentaIdValidator implements ConstraintValidator<ValidCuentaId, Long> {
+public class NumeroDeCuentaValidator implements ConstraintValidator<ValidNumeroCuenta, Long> {
 
     private final CuentaDao cuentaDao;
 
     @Autowired
-    public ValidCuentaIdValidator(CuentaDao cuentaDao) {
+    public NumeroDeCuentaValidator(CuentaDao cuentaDao) {
         this.cuentaDao = cuentaDao;
     }
 
     @Override
-    public void initialize(ValidCuentaId constraintAnnotation) {
+    public void initialize(ValidNumeroCuenta constraintAnnotation) {
     }
 
     @Override
     public boolean isValid(Long id, ConstraintValidatorContext context) {
 
-        return id != null && cuentaDao.existsById(id);
+        return id != null && cuentaDao.existsByNumeroCuenta(id);
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
@@ -21,9 +22,9 @@ public class Movimiento {
     private TipoMovimiento tipoMovimiento;
 
     @NotNull
-    private double valor;
+    private BigDecimal valor;
     @NotNull
-    private double saldo;
+    private BigDecimal saldo;
 
     @ManyToOne
     @JoinColumn(name = "cuenta_id")

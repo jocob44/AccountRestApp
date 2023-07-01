@@ -1,26 +1,37 @@
 package com.jislas.devsu.appcuentas.services;
 
+import com.jislas.devsu.appcuentas.handlers.OperacionInvalidaException;
+import com.jislas.devsu.appcuentas.models.dao.CuentaDao;
 import com.jislas.devsu.appcuentas.models.dao.MovimientoDao;
 import com.jislas.devsu.appcuentas.models.dto.movimiento.CreateMovimientoDto;
 import com.jislas.devsu.appcuentas.models.dto.movimiento.MovimientoDto;
+import com.jislas.devsu.appcuentas.models.entity.Cuenta;
 import com.jislas.devsu.appcuentas.models.entity.Movimiento;
+import com.jislas.devsu.appcuentas.models.entity.TipoMovimiento;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class MovimientoServiceImpl implements MovimientoService {
+
+    private final CuentaDao cuentaDao;
     private final MovimientoDao movimientoDao;
+    @Value("${daily_limit}")
+    private BigDecimal DAILY_DEBIT_LIMIT;
 
     @Autowired
-    public MovimientoServiceImpl(MovimientoDao movimientoDao) {
+    public MovimientoServiceImpl(MovimientoDao movimientoDao, CuentaDao cuentaDao) {
         this.movimientoDao = movimientoDao;
+        this.cuentaDao = cuentaDao;
     }
 
     @Override
@@ -40,9 +51,47 @@ public class MovimientoServiceImpl implements MovimientoService {
 
     @Override
     public MovimientoDto createMovimiento(CreateMovimientoDto movimientoDto) {
-        Movimiento movimiento = convertToEntity(movimientoDto);
+
+        Cuenta cuenta = this.cuentaDao.findByNumeroCuenta(movimientoDto.getNumeroCuenta());
+        validarMovimiento(movimientoDto, cuenta);
+
+        Movimiento movimiento = new MovimientoBuilder()
+                .withMonto(movimientoDto.getValor())
+                .withCuenta(cuenta)
+                .withFecha(movimientoDto.getFecha())
+                .build();
         Movimiento savedMovimiento = movimientoDao.save(movimiento);
+        cuenta.setLastMovement(savedMovimiento);
+        cuentaDao.save(cuenta);
         return convertToDto(savedMovimiento);
+    }
+
+    public void validarMovimiento(CreateMovimientoDto movimiento, Cuenta cuenta) {
+
+        if (movimiento.getValor().compareTo(BigDecimal.ZERO) == 0) {
+            throw new OperacionInvalidaException("El valor deber ser distinto de cero");
+        }
+        if (movimiento.getValor().compareTo(BigDecimal.ZERO) < 0) {
+
+            if (movimiento.getValor().multiply(BigDecimal.valueOf(-1)).compareTo(DAILY_DEBIT_LIMIT) > 0) {
+                throw new OperacionInvalidaException("Cupo Diario Excedido");
+            }
+
+            BigDecimal valorAcumulado = this.movimientoDao.sumarValorOperacionesPorTipoCuentaYFecha(TipoMovimiento.DEBITO, movimiento.getNumeroCuenta(), movimiento.getFecha());
+            if (valorAcumulado == null) {
+                valorAcumulado = BigDecimal.ZERO;
+            }
+
+            if (valorAcumulado.add(movimiento.getValor()).multiply(BigDecimal.valueOf(-1)).compareTo(DAILY_DEBIT_LIMIT) > 0) {
+                throw new OperacionInvalidaException("Cupo Diario Excedido");
+            }
+
+            BigDecimal saldo = (cuenta.getLastMovement() != null ? cuenta.getLastMovement().getSaldo() : cuenta.getSaldoInicial());
+
+            if ((saldo.add(movimiento.getValor()).compareTo(BigDecimal.ZERO)) < 0) {
+                throw new OperacionInvalidaException("Saldo no Disponible");
+            }
+        }
     }
 
     @Override
@@ -68,9 +117,4 @@ public class MovimientoServiceImpl implements MovimientoService {
         return movimientoDto;
     }
 
-    private Movimiento convertToEntity(CreateMovimientoDto movimientoDto) {
-        Movimiento movimiento = new Movimiento();
-        BeanUtils.copyProperties(movimientoDto, movimiento);
-        return movimiento;
-    }
 }
