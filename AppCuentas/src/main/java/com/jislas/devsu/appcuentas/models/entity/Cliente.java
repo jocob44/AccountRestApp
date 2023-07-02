@@ -17,7 +17,7 @@ import java.util.List;
 public class Cliente extends Persona {
 
     @NotEmpty
-    private String clientId;
+    private String clienteId;
 
     @NotEmpty
     private String contrasena;

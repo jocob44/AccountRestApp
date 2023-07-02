@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ClienteDao extends JpaRepository<Cliente, Long> {
+    Cliente getClienteByClienteId(String clienteId);
+
+    boolean existsByClienteId(String clienteId);
 }

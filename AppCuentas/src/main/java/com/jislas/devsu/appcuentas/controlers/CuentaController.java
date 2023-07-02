@@ -40,12 +40,10 @@ public class CuentaController {
     public ResponseEntity<?> createCuenta(@Valid @RequestBody CreateCuentaDto cuentaDto, BindingResult result) {
 
         if (result.hasErrors()) {
-            // Obtener los errores de validación
-            List<String> errores = result.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
+             List<String> errores = result.getAllErrors().stream()
+                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                     .collect(Collectors.toList());
 
-            // Devolver una respuesta de error con los mensajes de validación
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
 
         }

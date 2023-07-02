@@ -1,9 +1,11 @@
 package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.handlers.OperacionInvalidaException;
+import com.jislas.devsu.appcuentas.models.dao.ClienteDao;
 import com.jislas.devsu.appcuentas.models.dao.CuentaDao;
 import com.jislas.devsu.appcuentas.models.dto.Cuenta.CreateCuentaDto;
 import com.jislas.devsu.appcuentas.models.dto.Cuenta.CuentaDto;
+import com.jislas.devsu.appcuentas.models.entity.Cliente;
 import com.jislas.devsu.appcuentas.models.entity.Cuenta;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +22,14 @@ import java.util.stream.Collectors;
 public class CuentaServiceImpl implements CuentaService {
     private final CuentaDao cuentaDao;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final ClienteDao clienteDao;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CuentaServiceImpl(CuentaDao cuentaDao) {
+    public CuentaServiceImpl(CuentaDao cuentaDao, ClienteDao clienteDao, MessageSource messageSource) {
         this.cuentaDao = cuentaDao;
+        this.clienteDao = clienteDao;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -71,7 +75,6 @@ public class CuentaServiceImpl implements CuentaService {
             cuentaExistente.setTipo(cuentaDto.getTipo());
         }
 
-        BeanUtils.copyProperties(cuentaDto, cuentaExistente, "id");
         Cuenta updatedCuenta = cuentaDao.save(cuentaExistente);
         return convertToDto(updatedCuenta);
     }
@@ -93,6 +96,8 @@ public class CuentaServiceImpl implements CuentaService {
     private Cuenta convertToEntity(CreateCuentaDto cuentaDto) {
         Cuenta cuenta = new Cuenta();
         BeanUtils.copyProperties(cuentaDto, cuenta);
+        Cliente client = clienteDao.getClienteByClienteId(cuentaDto.getClienteId());
+        cuenta.setCliente(client);
         return cuenta;
     }
 
@@ -124,4 +129,6 @@ public class CuentaServiceImpl implements CuentaService {
         BeanUtils.copyProperties(cuentaActualizada, cuentaDtoActualizada);
         return cuentaDtoActualizada;
     }
+
+
 }

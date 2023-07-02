@@ -21,6 +21,6 @@ public class CreateCuentaDto {
     private EstadoCuenta estado;
 
     @ValidClientId(message = "El Client Id debe ser válido")
-    private Long clienteId;
+    private String clienteId;
     private TipoCuenta tipo;
 }

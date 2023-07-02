@@ -2,7 +2,7 @@ package com.jislas.devsu.appcuentas.services;
 
 import com.jislas.devsu.appcuentas.models.dao.ClienteDao;
 import com.jislas.devsu.appcuentas.models.dto.cliente.ClienteDto;
-import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClientDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClienteDto;
 import com.jislas.devsu.appcuentas.models.entity.Cliente;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class ClienteServiceImpl implements ClienteService {
         return convertToDto(cliente);
     }
 
-    public ClienteDto createCliente(CreateClientDto clienteDto) {
+    public ClienteDto createCliente(CreateClienteDto clienteDto) {
         Cliente cliente = convertToEntity(clienteDto);
         Cliente savedCliente = clienteDao.save(cliente);
         return convertToDto(savedCliente);
@@ -91,7 +91,7 @@ public class ClienteServiceImpl implements ClienteService {
         return clienteDto;
     }
 
-    private Cliente convertToEntity(CreateClientDto clienteDto) {
+    private Cliente convertToEntity(CreateClienteDto clienteDto) {
         Cliente cliente = new Cliente();
         BeanUtils.copyProperties(clienteDto, cliente);
         return cliente;

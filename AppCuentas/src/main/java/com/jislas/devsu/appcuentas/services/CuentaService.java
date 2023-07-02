@@ -17,4 +17,5 @@ public interface CuentaService {
     void deleteCuenta(Long id);
 
     CuentaDto partialUpdateCuenta(Long id, CuentaDto cuentaDto);
+
 }

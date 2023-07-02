@@ -1,7 +1,7 @@
 package com.jislas.devsu.appcuentas.controlers;
 
 import com.jislas.devsu.appcuentas.models.dto.cliente.ClienteDto;
-import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClientDto;
+import com.jislas.devsu.appcuentas.models.dto.cliente.CreateClienteDto;
 import com.jislas.devsu.appcuentas.services.ClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class ClienteController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createCliente(@Valid @RequestBody CreateClientDto clienteDto, BindingResult result) {
+    public ResponseEntity<?> createCliente(@Valid @RequestBody CreateClienteDto clienteDto, BindingResult result) {
 
         if (result.hasErrors()) {
             List<String> errores = result.getAllErrors().stream()
