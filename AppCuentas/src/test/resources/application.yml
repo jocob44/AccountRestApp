@@ -1,0 +1,4 @@
+spring:
+  mvc:
+    validation:
+      enabled: true

@@ -7,6 +7,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ClienteDto extends PersonaDto {
+
+
     private String clienteId;
     private String contrasena;
     private EstadoCliente estado;
