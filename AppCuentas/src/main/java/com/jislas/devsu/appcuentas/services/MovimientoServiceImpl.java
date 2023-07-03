@@ -105,7 +105,15 @@ public class MovimientoServiceImpl implements MovimientoService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         messageSource.getMessage("error.invalid.movimiento.id.inexistente", new Object[]{id}, LocaleContextHolder.getLocale())
                 ));
-        BeanUtils.copyProperties(movimientoDto, existingMovimiento, "id");
+        if (!existingMovimiento.getValor().equals(movimientoDto.getValor())) {
+            throw new OperacionInvalidaException("No es posible modificar el valor de un movimiento");
+        }
+        if (!existingMovimiento.getSaldo().equals(movimientoDto.getSaldo())) {
+            throw new OperacionInvalidaException("No es posible modificar Saldo de un Movimiento");
+        }
+        if (!existingMovimiento.getTipoMovimiento().equals(movimientoDto.getTipoMovimiento())) {
+            throw new OperacionInvalidaException("No es posible modificar Tipo de un Movimiento");
+        }
         Movimiento updatedMovimiento = movimientoDao.save(existingMovimiento);
         return convertToDto(updatedMovimiento);
     }
@@ -129,7 +137,7 @@ public class MovimientoServiceImpl implements MovimientoService {
 
         // Aplicar las actualizaciones parciales al movimiento existente
         if (movimientoDto.getTipoMovimiento() != null) {
-            movimientoExistente.setTipoMovimiento(movimientoDto.getTipoMovimiento());
+            throw new OperacionInvalidaException(messageSource.getMessage("error.invalid.movimiento.tipo", null, LocaleContextHolder.getLocale()));
         }
 
         if (movimientoDto.getFecha() != null) {
