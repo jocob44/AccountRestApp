@@ -978,7 +978,7 @@
           "response": []
         },
         {
-          "name": "PUT Movimiento Copy",
+          "name": "Patch Movimiento",
           "request": {
             "method": "PATCH",
             "header": [],
